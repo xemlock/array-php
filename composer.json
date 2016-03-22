@@ -1,0 +1,20 @@
+{
+    "name": "xemlock/array-php",
+    "description": "A tiny set of array functions missing from the PHP core",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "xemlock",
+            "email": "xemlock@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    },
+    "autoload": {
+        "files": [
+            "array.php"
+        ]
+    }
+}
