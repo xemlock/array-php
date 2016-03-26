@@ -111,3 +111,90 @@ if (!function_exists('array_flatten')) {
         return $result;
     }
 }
+
+if (!function_exists('array_tail')) {
+    /**
+     * Return all items from array except first element
+     *
+     * @param array $array
+     * @param bool $preserve_keys
+     * @return array|null
+     */
+    function array_tail($array, $preserve_keys = false)
+    {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        return array_slice($array, 1, count($array) - 1, $preserve_keys);
+    }
+}
+
+if (!function_exists('array_every')) {
+    /**
+     * Test whether all items in the array pass the callback test
+     *
+     * @param array $array
+     * @param callable $callback
+     * @return bool
+     */
+    function array_every($array, $callback)
+    {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        if (!is_callable($callback)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be a valid callback, %s given', __FUNCTION__, 2, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        foreach ($array as $key => $value) {
+            if (!call_user_func($callback, $value, $key, $array)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+if (!function_exists('array_some')) {
+    /**
+     * Test whether at least one item in the array pass the callback test
+     *
+     * @param array $array
+     * @param callable $callback
+     * @return bool
+     */
+    function array_some($array, $callback)
+    {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        if (!is_callable($callback)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be a valid callback, %s given', __FUNCTION__, 2, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        foreach ($array as $key => $value) {
+            if (call_user_func($callback, $value, $key, $array)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
