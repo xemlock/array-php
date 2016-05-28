@@ -66,6 +66,25 @@ if (!function_exists('array_reduce_left')) {
     }
 }
 
+if (!function_exists('array_reduce_right')) {
+    function array_reduce_right($array, $callback, $initial = null)
+    {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        end($array);
+        while (($key = key($array)) !== null) {
+            $initial = call_user_func($callback, $initial, current($array), $key);
+            prev($array);
+        }
+        return $initial;
+    }
+}
+
 if (!function_exists('array_flatten')) {
     /**
      * Convert multi-dimensional array into a flat array
