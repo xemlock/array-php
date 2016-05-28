@@ -198,3 +198,55 @@ if (!function_exists('array_some')) {
         return false;
     }
 }
+
+if (!function_exists('array_get_path')) {
+    /**
+     * @param array $array
+     * @param string|array $path
+     * @return mixed
+     */
+    function array_get_path($array, $path) {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        $path = array_values((array) $path);
+        $value = null;
+        while (count($path)) {
+            $part = array_shift($path);
+            if (isset($value[$part])) {
+                $value = $value[$part];
+            } else {
+                return null;
+            }
+        }
+        return $value;
+    }
+}
+
+if (!function_exists('array_set_path')) {
+    function array_set_path($array, $path, $value) {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        $path = array_values((array) $path);
+        $elem = &$array;
+        while (count($path)) {
+            $part = array_shift($path);
+            if (!count($path)) {
+                $elem[$part] = $value;
+            } elseif (!isset($elem[$part]) || !is_array($elem[$part])) {
+                $elem[$part] = array();
+            }
+            $elem = &$elem[$part];
+        }
+        return $array;
+    }
+}
