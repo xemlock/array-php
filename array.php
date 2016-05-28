@@ -213,12 +213,10 @@ if (!function_exists('array_get_path')) {
             );
             return null;
         }
-        $path = array_values((array) $path);
-        $value = null;
-        while (count($path)) {
-            $part = array_shift($path);
-            if (isset($value[$part])) {
-                $value = $value[$part];
+        $value = $array;
+        foreach ((array) $path as $key) {
+            if (isset($value[$key])) {
+                $value = $value[$key];
             } else {
                 return null;
             }
@@ -236,17 +234,14 @@ if (!function_exists('array_set_path')) {
             );
             return null;
         }
-        $path = array_values((array) $path);
-        $elem = &$array;
-        while (count($path)) {
-            $part = array_shift($path);
-            if (!count($path)) {
-                $elem[$part] = $value;
-            } elseif (!isset($elem[$part]) || !is_array($elem[$part])) {
-                $elem[$part] = array();
+        $ref = &$array;
+        foreach ((array) $path as $key) {
+            if (!is_array($ref)) {
+                $ref = array();
             }
-            $elem = &$elem[$part];
+            $ref = &$ref[$key];
         }
+        $ref = $value;
         return $array;
     }
 }
