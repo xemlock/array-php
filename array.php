@@ -20,6 +20,21 @@ if (!function_exists('array_first')) {
     }
 }
 
+if (!function_exists('array_first_key')) {
+    function array_first_key($array)
+    {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        reset($array);
+        return key($array);
+    }
+}
+
 if (!function_exists('array_last')) {
     /**
      * Returns the value of the last array element
