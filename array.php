@@ -260,7 +260,7 @@ if (!function_exists('array_get_path')) {
 }
 
 if (!function_exists('array_set_path')) {
-    function array_set_path($array, $path, $value) {
+    function array_set_path(&$array, $path, $value) {
         if (!is_array($array)) {
             trigger_error(
                 sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
@@ -279,3 +279,50 @@ if (!function_exists('array_set_path')) {
         return $array;
     }
 }
+
+if (!function_exists('array_unset_path')) {
+    function array_unset_path(&$array, $path) {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        $path = (array) $path;
+        $ref = &$array;
+        while (count($path)) {
+            $key = array_shift($path);
+            if (!is_array($ref) || !array_key_exists($key, $ref)) {
+                break;
+            }
+            if (count($path)) {
+                $ref = &$ref[$key];
+            } else {
+                unset($ref[$key]);
+            }
+        }
+        return $array;
+    }
+}
+
+if (!function_exists('array_path_exists')) {
+    function array_path_exists($array, $path) {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return null;
+        }
+        $value = $array;
+        foreach ((array) $path as $key) {
+            if (!is_array($value) || !array_key_exists($key, $value)) {
+                return false;
+            }
+            $value = $value[$key];
+        }
+        return true;
+    }
+}
+
