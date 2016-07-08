@@ -326,3 +326,28 @@ if (!function_exists('array_path_exists')) {
     }
 }
 
+if (!function_exists('array_change_key_case_recursive')) {
+    /**
+     * Recursively changes the case of all keys in an array.
+     *
+     * @param array $array The array to work on
+     * @param int $case    Either CASE_UPPER or CASE_LOWER (default)
+     * @return array|false An array with its keys lower or uppercased, or FALSE if array is not an array.
+     */
+    function array_change_key_case_recursive($array, $case = CASE_LOWER) {
+        if (!is_array($array)) {
+            trigger_error(
+                sprintf('%s expects parameter %d to be array, %s given', __FUNCTION__, 1, gettype($array)),
+                E_USER_WARNING
+            );
+            return false;
+        }
+        $array = array_change_key_case($array, $case);
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $array[$key] = array_change_key_case_recursive($value, $case);
+            }
+        }
+        return $array;
+    }
+}
